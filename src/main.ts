@@ -235,10 +235,11 @@ function runSimulation(series: PricePoint[], startDate: string, dailyAmount: num
 
   let investedAmount = 0;
   let unitsHeld = 0;
+  const simulationSeries = series.slice(startIndex);
 
-  const points = series.map((point, index) => {
-    const isContributionDay = index >= startIndex;
-    if (isContributionDay && dailyAmount > 0) {
+  const points = simulationSeries.map((point) => {
+    const isContributionDay = true;
+    if (dailyAmount > 0) {
       investedAmount += dailyAmount;
       unitsHeld += dailyAmount / point.indexValue;
     }
@@ -305,7 +306,7 @@ function renderChart(simulation: SimulationState): void {
   const yMin = minValue * 0.97;
   const yMax = maxValue * 1.03;
   const lastIndex = simulation.points.length - 1;
-  const domainStartDate = simulation.startDate < simulation.points[0].date ? simulation.startDate : simulation.points[0].date;
+  const domainStartDate = simulation.points[0].date;
   const domainEndDate = simulation.points[lastIndex].date;
   const startTime = toUtcTimestamp(domainStartDate);
   const endTime = toUtcTimestamp(domainEndDate);
